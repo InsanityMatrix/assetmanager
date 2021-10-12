@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:assetmanager/essential_icons_icons.dart';
+import 'package:draw_graph/draw_graph.dart';
+import 'package:draw_graph/models/feature.dart';
 
 void main() {
   runApp(MyApp());
@@ -192,6 +194,14 @@ class Overview extends StatefulWidget {
 }
 class _Overview extends State<Overview> with RestorationMixin {
   double width;
+  final List<Feature> totalFeatures = [
+    Feature(
+      title: "Total",
+      color: Colors.blue,
+      data: [9572,9624,9854,10732,10326],
+    ),
+  ];
+  
   @override
   String get restorationId => 'asset_manager';
 
@@ -221,6 +231,14 @@ class _Overview extends State<Overview> with RestorationMixin {
           //CALCULATED WORTH HERE
           Text("$10,326"),
           //Small Graph?
+          LineGraph(
+             features: totalFeatures,
+             size: Size(width, 300),
+             labelX:['Sep 7', 'Sep 14', 'Sep 21', 'Sep 28', 'Oct 5'],
+             labelY: ['7000','8000','9000','10000','11000'],
+             graphColor: Colors.black87,
+             showDescription: false,
+          ),
         ],
       ),
     );
