@@ -15,19 +15,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Asset Manager',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
-        // This makes the visual density adapt to the platform that you run
-        // the app on. For desktop platforms, the controls will be smaller and
-        // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: AssetManager(),
@@ -77,7 +65,7 @@ class _AssetManager extends State<AssetManager> with RestorationMixin {
   final children = <int, Widget>{
     0: Text("Overview"),
     1: Text("Manager"),
-    2: Text("Settings"),
+    2: Text("Explore"),
   };
   @override
   Widget build(BuildContext context) {
@@ -242,5 +230,25 @@ class _Overview extends State<Overview> with RestorationMixin {
         ],
       ),
     );
+  }
+}
+
+class Explore extends StatefulWidget {
+  const Explore({Key key}) : super(key: key);
+
+  @override
+  _Explore createState() => _Explore();
+}
+class _Explore extends State<Explore> with RestorationMixin {
+  double width;
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width - 24;
+    Widget search = getSearchBar(context);
+    return search;
+  }
+  
+  Widget getSearchBar(BuildContext context) {
+     return Container();
   }
 }
