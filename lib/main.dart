@@ -62,7 +62,7 @@ class _AssetManager extends State<AssetManager> with RestorationMixin {
   Widget getBody(int b) {
     switch (b) {
       case 0:
-        return Center(child: Text("Loading..."));
+        return Overview();
       case 1:
         return Manager();
       case 2:
@@ -180,6 +180,48 @@ class _Manager extends State<Manager> with RestorationMixin {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+class Overview extends StatefulWidget {
+  const Overview({Key key}) : super(key: key);
+
+  @override
+  _Overview createState() => _Overview();
+}
+class _Overview extends State<Overview> with RestorationMixin {
+  double width;
+  @override
+  String get restorationId => 'asset_manager';
+
+  @override
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {}
+
+  @override
+  Widget build(BuildContext context) {
+    width = MediaQuery.of(context).size.width - 24;
+    Widget leader = getLeader();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        leader,
+      ],
+    );
+  }
+  
+  Widget getLeader() {
+    return Container(
+      width: width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.left,
+        children: <Widget>[
+          //Title
+          Text("Total Worth:"),
+          //CALCULATED WORTH HERE
+          Text("$10,326"),
+          //Small Graph?
+        ],
       ),
     );
   }
