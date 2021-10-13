@@ -57,7 +57,7 @@ class _AssetManager extends State<AssetManager> with RestorationMixin {
       case 1:
         return Manager();
       case 2:
-        return Center(child: Text("Loading..."));
+        return Explore();
     }
     return Center(child: Text("Loading..."));
   }
@@ -176,7 +176,7 @@ class _Manager extends State<Manager> with RestorationMixin {
 }
 
 class Portfolio {
-  final String date;
+  final int date;
   final int amount;
   final charts.Color color;
 
@@ -204,11 +204,11 @@ class _Overview extends State<Overview> with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     var data = [
-      Portfolio('Sep 7', 9562, Colors.blue),
-      Portfolio('Sep 14', 9864, Colors.blue),
-      Portfolio('Sep 21', 10142, Colors.blue),
-      Portfolio('Sep 28', 10487, Colors.blue),
-      Portfolio('Oct 5', 10326, Colors.blue),
+      Portfolio(7, 9562, Colors.blue),
+      Portfolio(9, 9864, Colors.blue),
+      Portfolio(11, 10142, Colors.blue),
+      Portfolio(13, 10487, Colors.blue),
+      Portfolio(15, 10326, Colors.blue),
     ];
     var series = [
       charts.Series(
