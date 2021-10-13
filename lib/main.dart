@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:assetmanager/essential_icons_icons.dart';
-import 'package:draw_graph/draw_graph.dart';
-import 'package:draw_graph/models/feature.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 void main() {
   runApp(MyApp());
@@ -15,9 +14,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Asset Manager',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-      ),
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+          textTheme: TextTheme(
+            bodyText1: TextStyle(fontFamily: 'Times New Roman'),
+          )),
       home: AssetManager(),
     );
   }
@@ -126,7 +127,6 @@ class _Manager extends State<Manager> with RestorationMixin {
 
   List<Widget> getManagers() {
     List<Widget> managers = List<Widget>();
-    //TODO: CUSTOM ICONS
     managers
         .add(buildUniqueManager("Car(s)", new Icon(EssentialIcons.car_side)));
     managers.add(buildUniqueManager(
@@ -174,22 +174,27 @@ class _Manager extends State<Manager> with RestorationMixin {
     );
   }
 }
+
+class Portfolio {
+  final String date;
+  final int amount;
+  final charts.Color color;
+
+  Portfolio(this.date, this.amount, Color color)
+      : this.color = charts.Color(
+            r: color.red, g: color.green, b: color.blue, a: color.alpha);
+}
+
 class Overview extends StatefulWidget {
   const Overview({Key key}) : super(key: key);
 
   @override
   _Overview createState() => _Overview();
 }
+
 class _Overview extends State<Overview> with RestorationMixin {
   double width;
-  final List<Feature> totalFeatures = [
-    Feature(
-      title: "Total",
-      color: Colors.blue,
-      data: [9572,9624,9854,10732,10326],
-    ),
-  ];
-  
+
   @override
   String get restorationId => 'asset_manager';
 
@@ -198,8 +203,24 @@ class _Overview extends State<Overview> with RestorationMixin {
 
   @override
   Widget build(BuildContext context) {
+    var data = [
+      Portfolio('Sep 7', 9562, Colors.blue),
+      Portfolio('Sep 14', 9864, Colors.blue),
+      Portfolio('Sep 21', 10142, Colors.blue),
+      Portfolio('Sep 28', 10487, Colors.blue),
+      Portfolio('Oct 5', 10326, Colors.blue),
+    ];
+    var series = [
+      charts.Series(
+        domainFn: (Portfolio portfolio, _) => portfolio.date,
+        measureFn: (Portfolio portfolio, _) => portfolio.amount,
+        colorFn: (Portfolio portfolio, _) => portfolio.color,
+        id: 'portfolio',
+        data: data,
+      ),
+    ];
     width = MediaQuery.of(context).size.width - 24;
-    Widget leader = getLeader();
+    Widget leader = getLeader(series);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
@@ -207,26 +228,38 @@ class _Overview extends State<Overview> with RestorationMixin {
       ],
     );
   }
-  
-  Widget getLeader() {
+
+  Widget getLeader(var series) {
     return Container(
       width: width,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.left,
         children: <Widget>[
           //Title
-          Text("Total Worth:"),
+          Text("Total Worth:",
+              style: TextStyle(
+                fontFamily: 'Times New Roman',
+                fontWeight: FontWeight.bold,
+                fontSize: 22,
+              ),
+              textAlign: TextAlign.left),
           //CALCULATED WORTH HERE
-          Text("$10,326"),
-          //Small Graph?
-          LineGraph(
-             features: totalFeatures,
-             size: Size(width, 300),
-             labelX:['Sep 7', 'Sep 14', 'Sep 21', 'Sep 28', 'Oct 5'],
-             labelY: ['7000','8000','9000','10000','11000'],
-             graphColor: Colors.black87,
-             showDescription: false,
+          Text(
+            "\$10326",
+            style: TextStyle(
+              fontFamily: 'Times New Roman',
+              fontWeight: FontWeight.bold,
+              fontSize: 22,
+            ),
+            textAlign: TextAlign.left,
           ),
+          //Small Graph?
+          SizedBox(
+            height: 200,
+            child: charts.LineChart(
+              series,
+              animate: true,
+            ),
+          )
         ],
       ),
     );
@@ -239,16 +272,22 @@ class Explore extends StatefulWidget {
   @override
   _Explore createState() => _Explore();
 }
+
 class _Explore extends State<Explore> with RestorationMixin {
   double width;
+  @override
+  String get restorationId => 'asset_manager';
+
+  @override
+  void restoreState(RestorationBucket oldBucket, bool initialRestore) {}
   @override
   Widget build(BuildContext context) {
     width = MediaQuery.of(context).size.width - 24;
     Widget search = getSearchBar(context);
     return search;
   }
-  
+
   Widget getSearchBar(BuildContext context) {
-     return Container();
+    return Container();
   }
 }
